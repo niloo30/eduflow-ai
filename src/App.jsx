@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react'
 
+// Define the production Render backend API Base URL
+const API_BASE_URL = 'https://eduflow-ai-525b.onrender.com';
+
 function App() {
   // Auth states
   const [token, setToken] = useState(localStorage.getItem('token') || '')
@@ -31,7 +34,7 @@ function App() {
   // Fetch saved courses from backend
   const fetchCourses = async (authToken) => {
     try {
-      const response = await fetch('http://localhost:5000/api/courses', {
+      const response = await fetch(`${API_BASE_URL}/api/courses`, {
         headers: {
           'Authorization': `Bearer ${authToken}`
         }
@@ -62,7 +65,7 @@ function App() {
     const endpoint = authMode === 'login' ? 'login' : 'signup'
 
     try {
-      const response = await fetch(`http://localhost:5000/api/auth/${endpoint}`, {
+      const response = await fetch(`${API_BASE_URL}/api/auth/${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: emailInput, password: passwordInput })
@@ -107,7 +110,7 @@ function App() {
     setQuizQuestions([])
 
     try {
-      const response = await fetch('http://localhost:5000/api/generate-course', {
+      const response = await fetch(`${API_BASE_URL}/api/generate-course`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -145,7 +148,7 @@ function App() {
     setQuizFinished(false)
 
     try {
-      const response = await fetch('http://localhost:5000/api/generate-course-quiz', {
+      const response = await fetch(`${API_BASE_URL}/api/generate-course-quiz`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -185,8 +188,8 @@ function App() {
       setCurrentQuizIdx(prev => prev + 1)
     } else {
       setQuizFinished(true)
-      // Save score to database (the final score is already calculated inside our 'score' state variable!)
-      fetch('http://localhost:5000/api/save-score', {
+      // Save score to database
+      fetch(`${API_BASE_URL}/api/save-score`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
